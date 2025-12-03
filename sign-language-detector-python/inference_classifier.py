@@ -2,8 +2,24 @@ import pickle
 import cv2
 import mediapipe as mp
 import numpy as np
+from train_classifier2 import SoftmaxRegression
 
-model_dict = pickle.load(open('./model.p', 'rb'))
+
+print("Choose What Model You want to use ? \n 1: Random Forest \n 2 : SoftMaxClassifier")
+
+while True:
+    prompt = int(input("Enter Your choice 1 or 2 : "))
+    match(prompt):
+        case 1:
+            model_dict = pickle.load(open('./model.p', 'rb'))
+            break
+        case 2:
+            import torch
+            model_dict = pickle.load(open('./deepmodel.p', 'rb'))
+            break
+        case _:
+            print("Invalid Input")
+
 model = model_dict['model']
 
 cap = cv2.VideoCapture(0)
@@ -57,13 +73,21 @@ while True:
         x2 = int(max(x_) * W) - 10
         y2 = int(max(y_) * H) - 10
 
-        data_array = np.asarray(data_aux)
-
-        if data_array.shape[0] == model.n_features_in_:
-            prediction = model.predict([data_array])
-            pred_value = int(prediction[0])
-            if pred_value in labels_dict:
-                predicted_character = labels_dict[pred_value]
+        match(prompt):
+            case 1:
+                data_array = np.asarray(data_aux)
+                if data_array.shape[0] == model.n_features_in_:
+                    prediction = model.predict([data_array])
+                    pred_value = int(prediction[0])
+                    if pred_value in labels_dict:
+                        predicted_character = labels_dict[pred_value]
+            case 2:
+                data_array_torch = torch.asarray(data_aux)
+                if data_array_torch.shape[0] == model.n_features_in_:
+                    _,prediction = model(data_array_torch.view(1,-1))
+                    pred_value = prediction.item()
+                    if pred_value in labels_dict:
+                        predicted_character = labels_dict[pred_value]
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
         cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
