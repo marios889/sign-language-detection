@@ -2,7 +2,7 @@ import pickle
 import cv2
 import mediapipe as mp
 import numpy as np
-from train_classifier2 import SoftmaxRegression
+from train_classifier2 import SoftmaxClassification
 
 
 print("Choose What Model You want to use ? \n 1: Random Forest \n 2 : SoftMaxClassifier")

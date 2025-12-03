@@ -6,9 +6,9 @@ import torch.nn as nn
 import pickle
 
 # 1) model
-class SoftmaxRegression(nn.Module):
+class SoftmaxClassification(nn.Module):
     def __init__(self,num_input_features):
-        super(SoftmaxRegression,self).__init__()
+        super(SoftmaxClassification,self).__init__()
         self.n_features_in_ = num_input_features
         self.model = nn.Sequential(
             nn.Linear(num_input_features,24),
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     y_test = y_test.to(torch.long)
 
     # 2) loss and optimizer
-    model = SoftmaxRegression(n_features)
+    model = SoftmaxClassification(n_features)
     learning_rate = 0.4
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(),lr=learning_rate)
