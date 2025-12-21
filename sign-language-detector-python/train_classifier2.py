@@ -30,7 +30,7 @@ if __name__ == "__main__":
     labels = np.asarray(data_dict['labels'])
 
     n_samples, n_features = data.shape
-    x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
+    zx_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
 
     x_train = torch.from_numpy(x_train.astype(np.float32))
     x_test = torch.from_numpy(x_test.astype(np.float32))

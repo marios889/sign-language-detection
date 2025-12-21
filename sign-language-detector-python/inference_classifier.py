@@ -5,10 +5,13 @@ import numpy as np
 from train_classifier2 import SoftmaxClassification
 
 
-print("Choose What Model You want to use ? \n 1: Random Forest \n 2 : SoftMaxClassifier")
+print("Choose What Model You want to use ? \n"
+      "1: Random Forest \n"
+      "2: SoftMaxClassifier \n"
+      "3: SVM")
 
 while True:
-    prompt = int(input("Enter Your choice 1 or 2 : "))
+    prompt = int(input("Enter Your choice 1 or 2 or 3: "))
     match(prompt):
         case 1:
             model_dict = pickle.load(open('./model.p', 'rb'))
@@ -16,6 +19,9 @@ while True:
         case 2:
             import torch
             model_dict = pickle.load(open('./deepmodel.p', 'rb'))
+            break
+        case 3:
+            model_dict = pickle.load(open('./svm_model.p', 'rb'))
             break
         case _:
             print("Invalid Input")
@@ -88,6 +94,15 @@ while True:
                     pred_value = prediction.item()
                     if pred_value in labels_dict:
                         predicted_character = labels_dict[pred_value]
+
+            case 3:
+                data_array = np.asarray(data_aux)
+                if data_array.shape[0] == model.n_features_in_:
+                    prediction = model.predict([data_array])
+                    pred_value = int(prediction[0])
+                    if pred_value in labels_dict:
+                        predicted_character = labels_dict[pred_value]
+
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
         cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
